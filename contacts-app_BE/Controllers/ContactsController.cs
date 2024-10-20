@@ -60,7 +60,7 @@ namespace contacts_app_BE.Controllers
             try
             {
                 await _contactServices.AddContactAsync(contact);
-                return Ok(CreatedAtAction(nameof(GetAllContact), new { id = contact.Id }, contact));
+                return Ok(new { message = "Contact created successfully", data = CreatedAtAction(nameof(GetAllContact), new { id = contact.Id }, contact) });
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace contacts_app_BE.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(result);
+                return Ok(new { message = "Contact updated successfully", data = result });
             }
             catch (Exception ex)
             {
@@ -99,7 +99,7 @@ namespace contacts_app_BE.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(result);
+                return Ok(new { message = "Contact deleted successfully !!!", data = result });
             }
             catch (Exception ex)
             {
