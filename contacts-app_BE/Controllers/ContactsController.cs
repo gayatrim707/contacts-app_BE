@@ -22,54 +22,91 @@ namespace contacts_app_BE.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Contact>>> GetAllContact()
         {
-            var contacts = await _contactServices.GetAllContact();
-            return Ok(contacts);
+            try
+            {
+                var contacts = await _contactServices.GetAllContact();
+                return Ok(contacts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // GET api/<ContactsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Contact>> GetById(int id)
         {
-
-            var contacts = await _contactServices.GetContactById(id);
-            if (contacts == null)
+            try
             {
-                return NotFound();
+                var contacts = await _contactServices.GetContactById(id);
+                if (contacts == null)
+                {
+                    return NotFound();
+                }
+                return Ok(contacts);
             }
-            return Ok(contacts);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
+
         }
 
         // POST api/<ContactsController>
         [HttpPost]
         public async Task<ActionResult<Contact>> CreateContact(Contact contact)
         {
+            try
+            {
                 await _contactServices.AddContactAsync(contact);
                 return Ok(CreatedAtAction(nameof(GetAllContact), new { id = contact.Id }, contact));
-            
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
         }
 
         // PUT api/<ContactsController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateContact(int id, Contact updatedContact)
         {
-            var result = await _contactServices.UpdateContactAsync(id, updatedContact);
-            if (!result)
+            try
             {
-                return NotFound();
+                var result = await _contactServices.UpdateContactAsync(id, updatedContact);
+                if (!result)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
+
         }
 
         // DELETE api/<ContactsController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(int id)
         {
-            var result = await _contactServices.DeleteContactAsync(id);
-            if (!result)
+            try
             {
-                return NotFound();
+                var result = await _contactServices.DeleteContactAsync(id);
+                if (!result)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "An internal server error occurred. Please try again later.");
+            }
+
         }
     }
 }
